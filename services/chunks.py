@@ -13,8 +13,8 @@ tokenizer = tiktoken.get_encoding(
 )  # The encoding scheme to use for tokenization
 
 # Constants
-CHUNK_SIZE = 200  # The target size of each text chunk in tokens
-MIN_CHUNK_SIZE_CHARS = 350  # The minimum size of each text chunk in characters
+CHUNK_SIZE = 500  # The target size of each text chunk in tokens
+MIN_CHUNK_SIZE_CHARS = 50  # The minimum size of each text chunk in characters
 MIN_CHUNK_LENGTH_TO_EMBED = 5  # Discard chunks shorter than this
 EMBEDDINGS_BATCH_SIZE = int(os.environ.get("OPENAI_EMBEDDING_BATCH_SIZE", 128))  # The number of embeddings to request at a time
 MAX_NUM_CHUNKS = 10000  # The maximum number of chunks to generate from a text
@@ -67,7 +67,10 @@ def get_text_chunks(text: str, chunk_token_size: Optional[int]) -> List[str]:
             chunk_text.rfind("."),
             chunk_text.rfind("?"),
             chunk_text.rfind("!"),
-            chunk_text.rfind("\n"),
+            #chunk_text.rfind("\n"),
+            chunk_text.rfind("。"),
+            chunk_text.rfind("？"),
+            chunk_text.rfind("！"),
         )
 
         # If there is a punctuation mark, and the last punctuation index is before MIN_CHUNK_SIZE_CHARS
@@ -94,6 +97,8 @@ def get_text_chunks(text: str, chunk_token_size: Optional[int]) -> List[str]:
         if len(remaining_text) > MIN_CHUNK_LENGTH_TO_EMBED:
             chunks.append(remaining_text)
 
+    #for c in chunks:
+    #    print(c)
     return chunks
 
 

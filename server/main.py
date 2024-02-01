@@ -5,6 +5,7 @@ from fastapi import FastAPI, File, Form, HTTPException, Depends, Body, UploadFil
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
 from loguru import logger
+import traceback
 
 from models.api import (
     DeleteRequest,
@@ -67,6 +68,7 @@ async def upsert_file(
         ids = await datastore.upsert([document])
         return UpsertResponse(ids=ids)
     except Exception as e:
+        traceback.print_exc() 
         logger.error(e)
         raise HTTPException(status_code=500, detail=f"str({e})")
 
@@ -82,6 +84,7 @@ async def upsert(
         ids = await datastore.upsert(request.documents)
         return UpsertResponse(ids=ids)
     except Exception as e:
+        traceback.print_exc() 
         logger.error(e)
         raise HTTPException(status_code=500, detail="Internal Service Error")
 
